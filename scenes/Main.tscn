@@ -1,0 +1,928 @@
+[gd_scene load_steps=17 format=3 uid="uid://bl6hkl0yydynm"]
+
+[ext_resource type="Script" uid="uid://dn2bwk0dyv45u" path="res://scripts/main.gd" id="1_mnspv"]
+[ext_resource type="PackedScene" uid="uid://ctvesmdaqju66" path="res://scenes/components/NeonMenuButton.tscn" id="2_menu"]
+[ext_resource type="PackedScene" uid="uid://cnkax4apvg4lx" path="res://scenes/components/LevelHeader.tscn" id="3_header"]
+[ext_resource type="PackedScene" uid="uid://cg0tku0ddhso4" path="res://scenes/components/BottomActionButton.tscn" id="4_action"]
+[ext_resource type="PackedScene" uid="uid://bhjh5r3elc1wo" path="res://scenes/components/SelectionCard.tscn" id="5_card"]
+[ext_resource type="Texture2D" uid="uid://ciq3jj00gr51a" path="res://assets/ui/difficulty/lock.svg" id="15_lock"]
+[ext_resource type="Texture2D" uid="uid://3jkb1kg6j04o" path="res://assets/ui/game/home_button.svg" id="16_home"]
+[ext_resource type="Texture2D" uid="uid://dvyc10x31lrse" path="res://assets/ui/game/operator_add.svg" id="17_operator"]
+[ext_resource type="Texture2D" uid="uid://bvab4eg8mlcfh" path="res://assets/ui/game/difficulty_casual.svg" id="18_difficulty"]
+[ext_resource type="Texture2D" uid="uid://dc5hfhcrn3obl" path="res://assets/ui/game/level_type_5x5.svg" id="19_leveltype"]
+[ext_resource type="Texture2D" uid="uid://lrfyjsyvdwql" path="res://assets/ui/generated/bottom_panel_ai.png" id="20_actionbar"]
+[ext_resource type="Texture2D" uid="uid://dp81s3mx621mp" path="res://assets/ui/generated/reset_ai.png" id="21_reset"]
+[ext_resource type="Texture2D" uid="uid://cenmnc4s3wgs8" path="res://assets/ui/generated/undo_ai.png" id="22_undo"]
+[ext_resource type="Texture2D" uid="uid://d225i2pawoscg" path="res://assets/ui/generated/hint_ai.png" id="23_hint"]
+[ext_resource type="Texture2D" uid="uid://bj6kexka2fal8" path="res://assets/ui/game/hint_badge_circle.svg" id="24_badge"]
+[ext_resource type="Texture2D" uid="uid://bj18k02mvmwh" path="res://assets/ui/generated/divider_ai.png" id="25_divider"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mnspv")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0235294, 0.0666667, 0.117647, 1)
+
+[node name="CellsRoot" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+mouse_filter = 2
+
+[node name="RowLabels" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+
+[node name="ColLabels" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+
+[node name="MenuButton" parent="UI" instance=ExtResource("2_menu")]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 34.0
+offset_right = 94.0
+offset_bottom = 104.0
+
+[node name="LevelHeader" parent="UI" instance=ExtResource("3_header")]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 44.0
+offset_right = 420.0
+offset_bottom = 98.0
+
+[node name="UndoButton" parent="UI" instance=ExtResource("4_action")]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 842.0
+offset_right = 180.0
+offset_bottom = 900.0
+title = "撤销"
+
+[node name="HintButton" parent="UI" instance=ExtResource("4_action")]
+visible = false
+layout_mode = 0
+offset_left = 195.0
+offset_top = 842.0
+offset_right = 345.0
+offset_bottom = 900.0
+action_type = "hint"
+title = "提示"
+badge_count = 3
+
+[node name="RestartButton" parent="UI" instance=ExtResource("4_action")]
+visible = false
+layout_mode = 0
+offset_left = 360.0
+offset_top = 842.0
+offset_right = 510.0
+offset_bottom = 900.0
+action_type = "restart"
+title = "新游戏"
+
+[node name="NewGameButton" type="Button" parent="UI"]
+visible = false
+layout_mode = 0
+offset_right = 160.0
+offset_bottom = 48.0
+text = "NEXT"
+
+[node name="StatusLabel" type="Label" parent="UI"]
+visible = false
+layout_mode = 0
+offset_left = 120.0
+offset_top = 912.0
+offset_right = 420.0
+offset_bottom = 946.0
+theme_override_colors/font_color = Color(0.560784, 0.909804, 0.709804, 1)
+horizontal_alignment = 1
+
+[node name="GameHud" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+mouse_filter = 2
+
+[node name="HomeButton" type="Control" parent="GameHud"]
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 42.0
+offset_right = 64.0
+offset_bottom = 86.0
+mouse_filter = 2
+
+[node name="Art" type="TextureRect" parent="GameHud/HomeButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("16_home")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Button" type="Button" parent="GameHud/HomeButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+flat = true
+
+[node name="OperatorIcon" type="TextureRect" parent="GameHud"]
+layout_mode = 0
+offset_left = 342.0
+offset_top = 42.0
+offset_right = 386.0
+offset_bottom = 86.0
+mouse_filter = 2
+texture = ExtResource("17_operator")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DifficultyIcon" type="TextureRect" parent="GameHud"]
+layout_mode = 0
+offset_left = 393.0
+offset_top = 42.0
+offset_right = 437.0
+offset_bottom = 86.0
+mouse_filter = 2
+texture = ExtResource("18_difficulty")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelTypeIcon" type="TextureRect" parent="GameHud"]
+layout_mode = 0
+offset_left = 444.0
+offset_top = 42.0
+offset_right = 520.0
+offset_bottom = 86.0
+mouse_filter = 2
+texture = ExtResource("19_leveltype")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelTypeLabel" type="Label" parent="GameHud/LevelTypeIcon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 19
+text = "5x5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopLine" type="ColorRect" parent="GameHud"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 120.0
+offset_right = 520.0
+offset_bottom = 121.0
+mouse_filter = 2
+color = Color(0.141176, 0.254902, 0.360784, 1)
+
+[node name="TopMarker" type="ColorRect" parent="GameHud"]
+layout_mode = 0
+offset_left = 258.0
+offset_top = 119.0
+offset_right = 286.0
+offset_bottom = 122.0
+mouse_filter = 2
+color = Color(0.192157, 0.964706, 0.717647, 1)
+
+[node name="BottomActionBar" type="TextureRect" parent="GameHud"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = 808.0
+offset_right = 503.0
+offset_bottom = 900.0
+mouse_filter = 2
+texture = ExtResource("20_actionbar")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Art" type="TextureRect" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("20_actionbar")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameHud/BottomActionBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 8.0
+offset_right = -16.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ResetBtn" type="Control" parent="GameHud/BottomActionBar/HBoxContainer"]
+custom_minimum_size = Vector2(144, 76)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="GameHud/BottomActionBar/HBoxContainer/ResetBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = -4
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="GameHud/BottomActionBar/HBoxContainer/ResetBtn/Content"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("21_reset")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="GameHud/BottomActionBar/HBoxContainer/ResetBtn/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Reset"
+horizontal_alignment = 1
+
+[node name="HitButton" type="Button" parent="GameHud/BottomActionBar/HBoxContainer/ResetBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+flat = true
+
+[node name="DividerA" type="TextureRect" parent="GameHud/BottomActionBar/HBoxContainer"]
+custom_minimum_size = Vector2(2, 72)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("25_divider")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UndoBtn" type="Control" parent="GameHud/BottomActionBar/HBoxContainer"]
+custom_minimum_size = Vector2(144, 76)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="GameHud/BottomActionBar/HBoxContainer/UndoBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = -4
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="GameHud/BottomActionBar/HBoxContainer/UndoBtn/Content"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("22_undo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="GameHud/BottomActionBar/HBoxContainer/UndoBtn/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Undo"
+horizontal_alignment = 1
+
+[node name="HitButton" type="Button" parent="GameHud/BottomActionBar/HBoxContainer/UndoBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+flat = true
+
+[node name="DividerB" type="TextureRect" parent="GameHud/BottomActionBar/HBoxContainer"]
+custom_minimum_size = Vector2(2, 72)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("25_divider")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HintBtn" type="Control" parent="GameHud/BottomActionBar/HBoxContainer"]
+custom_minimum_size = Vector2(144, 76)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = -4
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn/Content"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("23_hint")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Hint"
+horizontal_alignment = 1
+
+[node name="HintBadge" type="Control" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn"]
+anchors_preset = 0
+offset_left = 92.0
+offset_top = 2.0
+offset_right = 122.0
+offset_bottom = 32.0
+mouse_filter = 2
+
+[node name="Circle" type="TextureRect" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn/HintBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("24_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn/HintBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.0235294, 0.0666667, 0.117647, 1)
+theme_override_font_sizes/font_size = 16
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HitButton" type="Button" parent="GameHud/BottomActionBar/HBoxContainer/HintBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+flat = true
+
+[node name="ResetIcon" type="TextureRect" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 54.0
+offset_top = 18.0
+offset_right = 101.0
+offset_bottom = 65.0
+mouse_filter = 2
+texture = ExtResource("21_reset")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ResetLabel" type="Label" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 62.0
+offset_right = 128.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Reset"
+horizontal_alignment = 1
+
+[node name="UndoIcon" type="TextureRect" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 209.0
+offset_top = 18.0
+offset_right = 256.0
+offset_bottom = 65.0
+mouse_filter = 2
+texture = ExtResource("22_undo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="UndoLabel" type="Label" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 183.0
+offset_top = 62.0
+offset_right = 283.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Undo"
+horizontal_alignment = 1
+
+[node name="HintIcon" type="TextureRect" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 364.0
+offset_top = 18.0
+offset_right = 411.0
+offset_bottom = 65.0
+mouse_filter = 2
+texture = ExtResource("23_hint")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HintBadgeCircle" type="TextureRect" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 399.0
+offset_top = 8.0
+offset_right = 424.0
+offset_bottom = 33.0
+mouse_filter = 2
+texture = ExtResource("24_badge")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HintBadge" type="Label" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 397.0
+offset_top = 7.0
+offset_right = 427.0
+offset_bottom = 37.0
+theme_override_colors/font_color = Color(0.0235294, 0.0666667, 0.117647, 1)
+theme_override_font_sizes/font_size = 16
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HintLabel" type="Label" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 338.0
+offset_top = 62.0
+offset_right = 438.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 15
+text = "Hint"
+horizontal_alignment = 1
+
+[node name="ResetButton" type="Button" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_right = 155.0
+offset_bottom = 92.0
+focus_mode = 0
+flat = true
+
+[node name="UndoButton" type="Button" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 155.0
+offset_right = 311.0
+offset_bottom = 92.0
+focus_mode = 0
+flat = true
+
+[node name="HintButton" type="Button" parent="GameHud/BottomActionBar"]
+visible = false
+layout_mode = 0
+offset_left = 311.0
+offset_right = 466.0
+offset_bottom = 92.0
+focus_mode = 0
+flat = true
+
+[node name="OperationScreen" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+
+[node name="TopLine" type="ColorRect" parent="OperationScreen"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 104.0
+offset_right = 522.0
+offset_bottom = 105.0
+mouse_filter = 2
+color = Color(0.141176, 0.254902, 0.360784, 1)
+
+[node name="TopMarker" type="ColorRect" parent="OperationScreen"]
+layout_mode = 0
+offset_left = 102.0
+offset_top = 103.0
+offset_right = 134.0
+offset_bottom = 106.0
+mouse_filter = 2
+color = Color(0.207843, 0.811765, 1, 1)
+
+[node name="AddCard" parent="OperationScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 170.0
+offset_right = 266.0
+offset_bottom = 320.0
+card_title = "加法"
+
+[node name="MultiplyCard" parent="OperationScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 276.0
+offset_top = 170.0
+offset_right = 426.0
+offset_bottom = 320.0
+card_title = "乘法"
+icon_text = "×"
+
+[node name="SubtractCard" parent="OperationScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 344.0
+offset_right = 266.0
+offset_bottom = 494.0
+card_title = "减法"
+icon_text = "−"
+
+[node name="DivideCard" parent="OperationScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 276.0
+offset_top = 344.0
+offset_right = 426.0
+offset_bottom = 494.0
+card_title = "除法"
+icon_text = "÷"
+
+[node name="DifficultyScreen" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+
+[node name="BackButton" type="Button" parent="DifficultyScreen"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 42.0
+offset_right = 68.0
+offset_bottom = 86.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 34
+text = "←"
+flat = true
+
+[node name="TitleLabel" type="Label" parent="DifficultyScreen"]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 42.0
+offset_right = 264.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 28
+text = "选择难度"
+vertical_alignment = 1
+
+[node name="OperatorLabel" type="Label" parent="DifficultyScreen"]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 42.0
+offset_right = 510.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 34
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopLine" type="ColorRect" parent="DifficultyScreen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 104.0
+offset_right = 520.0
+offset_bottom = 105.0
+mouse_filter = 2
+color = Color(0.141176, 0.254902, 0.360784, 1)
+
+[node name="TopMarker" type="ColorRect" parent="DifficultyScreen"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 103.0
+offset_right = 136.0
+offset_bottom = 106.0
+mouse_filter = 2
+color = Color(0.207843, 0.811765, 1, 1)
+
+[node name="RelaxCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 206.0
+offset_right = 266.0
+offset_bottom = 372.0
+card_title = "休闲"
+title_above = true
+icon_asset = "res://assets/ui/difficulty/sun.svg"
+
+[node name="ExpertCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 276.0
+offset_top = 206.0
+offset_right = 402.0
+offset_bottom = 372.0
+card_title = "专家"
+title_above = true
+icon_asset = "res://assets/ui/difficulty/moon.svg"
+
+[node name="TimedCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 402.0
+offset_right = 266.0
+offset_bottom = 568.0
+card_title = "计时"
+title_above = true
+icon_asset = "res://assets/ui/difficulty/clock.svg"
+
+[node name="EndlessCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 276.0
+offset_top = 402.0
+offset_right = 402.0
+offset_bottom = 568.0
+card_title = "无尽"
+title_above = true
+icon_asset = "res://assets/ui/difficulty/infinity.svg"
+
+[node name="TutorialCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 636.0
+offset_right = 334.0
+offset_bottom = 802.0
+card_title = "新手教程"
+title_above = true
+icon_asset = "res://assets/ui/difficulty/question.svg"
+
+[node name="RelaxInfoCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 250.0
+offset_right = 134.0
+offset_bottom = 370.0
+description = "放松心情
+尽情游玩"
+locked = true
+full_art_asset = "res://assets/ui/difficulty/info_relax.svg"
+
+[node name="NoHelpInfoCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 250.0
+offset_right = 502.0
+offset_bottom = 370.0
+description = "无提示
+无撤销"
+locked = true
+full_art_asset = "res://assets/ui/difficulty/info_no_help.svg"
+
+[node name="CurrentLevelInfoCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 440.0
+offset_right = 502.0
+offset_bottom = 560.0
+description = "当前关卡
+第 1 关"
+locked = true
+full_art_asset = "res://assets/ui/difficulty/info_current_level.svg"
+
+[node name="RulesInfoCard" parent="DifficultyScreen" instance=ExtResource("5_card")]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 670.0
+offset_right = 204.0
+offset_bottom = 790.0
+description = "建议先
+学习规则"
+locked = true
+full_art_asset = "res://assets/ui/difficulty/info_rules.svg"
+
+[node name="LockIcon" type="TextureRect" parent="DifficultyScreen"]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 480.0
+offset_right = 103.0
+offset_bottom = 508.0
+mouse_filter = 2
+texture = ExtResource("15_lock")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RangeSizeScreen" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_right = 540.0
+offset_bottom = 960.0
+
+[node name="BackButton" type="Button" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 42.0
+offset_right = 68.0
+offset_bottom = 86.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 34
+text = "←"
+flat = true
+
+[node name="TitleLabel" type="Label" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 42.0
+offset_right = 360.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 22
+text = "数字范围&盘面尺寸"
+vertical_alignment = 1
+
+[node name="OperatorLabel" type="Label" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 42.0
+offset_right = 444.0
+offset_bottom = 86.0
+theme_override_colors/font_color = Color(0.956863, 0.968627, 0.980392, 1)
+theme_override_font_sizes/font_size = 34
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DifficultyIcon" type="TextureRect" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 460.0
+offset_top = 42.0
+offset_right = 504.0
+offset_bottom = 86.0
+mouse_filter = 2
+texture = ExtResource("18_difficulty")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TopLine" type="ColorRect" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 104.0
+offset_right = 520.0
+offset_bottom = 105.0
+mouse_filter = 2
+color = Color(0.141176, 0.254902, 0.360784, 1)
+
+[node name="TopMarker" type="ColorRect" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 103.0
+offset_right = 56.0
+offset_bottom = 106.0
+mouse_filter = 2
+color = Color(0.207843, 0.811765, 1, 1)
+
+[node name="RangeContainer" type="HBoxContainer" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 150.0
+offset_right = 500.0
+offset_bottom = 250.0
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Range1" type="Button" parent="RangeSizeScreen/RangeContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "1~9"
+
+[node name="Range2" type="Button" parent="RangeSizeScreen/RangeContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "1~19"
+
+[node name="Range3" type="Button" parent="RangeSizeScreen/RangeContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "1~29"
+
+[node name="MidLine" type="ColorRect" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 300.0
+offset_right = 480.0
+offset_bottom = 301.0
+mouse_filter = 2
+color = Color(0.141176, 0.254902, 0.360784, 1)
+
+[node name="SizeGrid" type="GridContainer" parent="RangeSizeScreen"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 350.0
+offset_right = 450.0
+offset_bottom = 600.0
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 2
+
+[node name="Size5" type="Button" parent="RangeSizeScreen/SizeGrid"]
+custom_minimum_size = Vector2(120, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "5x5"
+
+[node name="Size6" type="Button" parent="RangeSizeScreen/SizeGrid"]
+custom_minimum_size = Vector2(120, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "6x6"
+
+[node name="Size7" type="Button" parent="RangeSizeScreen/SizeGrid"]
+custom_minimum_size = Vector2(120, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "7x7"
+
+[node name="Size8" type="Button" parent="RangeSizeScreen/SizeGrid"]
+custom_minimum_size = Vector2(120, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "8x8"

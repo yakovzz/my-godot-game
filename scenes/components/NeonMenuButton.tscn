@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctvesmdaqju66"]
+
+[ext_resource type="Script" uid="uid://don4ydcw3qxpj" path="res://scripts/components/neon_menu_button.gd" id="1_lbm0g"]
+
+[node name="NeonMenuButton" type="Button"]
+custom_minimum_size = Vector2(70, 70)
+offset_right = 70.0
+offset_bottom = 70.0
+flat = true
+script = ExtResource("1_lbm0g")
