@@ -12,7 +12,8 @@ const RANGE_DIVIDER_TEXTURE := preload("res://assets/ui/generated/range_divider_
 
 var grid_size := 5
 var cell_size := Vector2(60, 60)
-const TARGET_SIZE := Vector2(44, 44)
+#const target_size := Vector2(44, 44)
+var target_size := Vector2(44, 44)
 var cell_gap := 12.0
 var target_gap := 24.0
 var board_width := grid_size * cell_size.x + (grid_size - 1) * cell_gap
@@ -226,14 +227,14 @@ func _setup_range_size_screen_style() -> void:
 	styled_root.mouse_filter = Control.MOUSE_FILTER_PASS
 	range_size_screen.add_child(styled_root)
 
-	var panel := TextureRect.new()
-	panel.position = Vector2(6, 14)
-	panel.size = Vector2(528, 880)
-	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.texture = RANGE_PANEL_TEXTURE
-	panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	panel.stretch_mode = TextureRect.STRETCH_SCALE
-	styled_root.add_child(panel)
+	#var panel := TextureRect.new()
+	#panel.position = Vector2(6, 14)
+	#panel.size = Vector2(528, 880)
+	#panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	#panel.texture = RANGE_PANEL_TEXTURE
+	#panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	#panel.stretch_mode = TextureRect.STRETCH_SCALE 
+	#styled_root.add_child(panel)
 
 	range_back_hit_button = Button.new()
 	range_back_hit_button.position = Vector2(18, 22)
@@ -245,18 +246,18 @@ func _setup_range_size_screen_style() -> void:
 	_connect_button(range_back_hit_button, Callable(self, "_on_range_screen_back_pressed"))
 
 	range_header_title_label = Label.new()
-	range_header_title_label.position = Vector2(46, 46)
+	range_header_title_label.position = Vector2(46, 50)
 	range_header_title_label.size = Vector2(320, 34)
 	range_header_title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	range_header_title_label.add_theme_font_size_override("font_size", 17)
 	range_header_title_label.add_theme_color_override("font_color", Color("F5F8FC"))
-	range_header_title_label.text = "Select Number Range and Board Size"
+	range_header_title_label.text = "数字范围&盘面尺寸"
 	range_header_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	styled_root.add_child(range_header_title_label)
 
 	range_header_operator_label = Label.new()
-	range_header_operator_label.position = Vector2(404, 34)
-	range_header_operator_label.size = Vector2(44, 34)
+	range_header_operator_label.position = Vector2(404, 48)
+	range_header_operator_label.size = Vector2(50, 50)
 	range_header_operator_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	range_header_operator_label.add_theme_font_size_override("font_size", 34)
 	range_header_operator_label.add_theme_color_override("font_color", Color("F5F8FC"))
@@ -265,8 +266,8 @@ func _setup_range_size_screen_style() -> void:
 	styled_root.add_child(range_header_operator_label)
 
 	range_header_difficulty_icon = TextureRect.new()
-	range_header_difficulty_icon.position = Vector2(456, 34)
-	range_header_difficulty_icon.size = Vector2(44, 44)
+	range_header_difficulty_icon.position = Vector2(446, 55)
+	range_header_difficulty_icon.size = Vector2(40, 36)
 	range_header_difficulty_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	range_header_difficulty_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	range_header_difficulty_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -542,27 +543,50 @@ func _on_range_selected(min_val: int, max_val: int) -> void:
 
 func _on_size_selected(size: int) -> void:
 	grid_size = size
-	if size == 5:
-		cell_size = Vector2(60, 60)
-	elif size == 6:
-		cell_size = Vector2(50, 50)
-	elif size == 7:
-		cell_size = Vector2(42, 42)
-	elif size == 8:
-		cell_size = Vector2(36, 36)
-		
+
+	match size:
+		5:
+			cell_size = Vector2(60, 60)
+			cell_gap = 12.0
+			target_gap = 24.0
+			target_size = Vector2(44, 44)
+
+		6:
+			cell_size = Vector2(50, 50)
+			cell_gap = 10.0
+			target_gap = 20.0
+			target_size = Vector2(40, 40)
+
+		7:
+			cell_size = Vector2(42, 42)
+			cell_gap = 8.0
+			target_gap = 16.0
+			target_size = Vector2(42, 42)
+
+		8:
+			cell_size = Vector2(42, 42)
+			cell_gap = 10.0
+			target_gap = 18.0
+			target_size = Vector2(42, 42)
+
 	board_width = grid_size * cell_size.x + (grid_size - 1) * cell_gap
-	grid_origin = Vector2((VIEWPORT_SIZE.x - board_width) * 0.5, 255)
-	
+
+	grid_origin = Vector2(
+		(VIEWPORT_SIZE.x - board_width) * 0.5,
+		255
+	)
+
 	if level_type_label != null:
 		level_type_label.text = "%dx%d" % [size, size]
-	
+
 	if range_size_screen != null:
 		range_size_screen.visible = false
+
 	_set_game_visible(true)
-	
+
 	_create_target_nodes()
 	_create_grid_nodes()
+
 	generate_puzzle()
 
 
@@ -609,6 +633,7 @@ func _create_grid_nodes() -> void:
 			cell.position = grid_origin + Vector2(col, row) * (cell_size + Vector2(cell_gap, cell_gap))
 			cell.size = cell_size
 			cell.custom_minimum_size = cell_size
+			cell.size = cell_size
 			var toggle_callable := Callable(self, "_on_cell_toggled")
 			if cell.has_signal("toggled") and not cell.is_connected("toggled", toggle_callable):
 				cell.connect("toggled", toggle_callable)
@@ -631,18 +656,18 @@ func _create_target_nodes() -> void:
 	col_target_panels_top.clear()
 	col_target_panels_bottom.clear()
 
-	var left_x := grid_origin.x - target_gap - TARGET_SIZE.x
+	var left_x := grid_origin.x - target_gap - target_size.x
 	var right_x := grid_origin.x + (cell_size.x + cell_gap) * grid_size - cell_gap + target_gap
-	var top_y := grid_origin.y - target_gap - TARGET_SIZE.y
+	var top_y := grid_origin.y - target_gap - target_size.y
 	var bottom_y := grid_origin.y + (cell_size.y + cell_gap) * grid_size - cell_gap + target_gap
 
 	for row in grid_size:
-		var y := grid_origin.y + row * (cell_size.y + cell_gap) + (cell_size.y - TARGET_SIZE.y) * 0.5
+		var y := grid_origin.y + row * (cell_size.y + cell_gap) + (cell_size.y - target_size.y) * 0.5
 		row_target_panels_left.append(_build_target_panel(row_labels, Vector2(left_x, y), "left"))
 		row_target_panels_right.append(_build_target_panel(row_labels, Vector2(right_x, y), "left"))
 
 	for col in grid_size:
-		var x := grid_origin.x + col * (cell_size.x + cell_gap) + (cell_size.x - TARGET_SIZE.x) * 0.5
+		var x := grid_origin.x + col * (cell_size.x + cell_gap) + (cell_size.x - target_size.x) * 0.5
 		col_target_panels_top.append(_build_target_panel(col_labels, Vector2(x, top_y), "bottom"))
 		col_target_panels_bottom.append(_build_target_panel(col_labels, Vector2(x, bottom_y), "bottom"))
 
@@ -650,27 +675,29 @@ func _create_target_nodes() -> void:
 func _build_target_panel(parent: Control, pos: Vector2, line_side: String) -> Dictionary:
 	var panel := Panel.new()
 	panel.position = pos
-	panel.size = TARGET_SIZE
-	panel.custom_minimum_size = TARGET_SIZE
+	panel.size = target_size
+	panel.custom_minimum_size = target_size
 	panel.add_theme_stylebox_override("panel", _build_target_style(false))
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var label := Label.new()
-	label.size = TARGET_SIZE
+	label.size = target_size
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", 26)
+	var target_font_size: int = int(target_size.x * 0.55)
+	label.add_theme_font_size_override("font_size", target_font_size)
 	label.add_theme_color_override("font_color", Color("F5F8FC"))
 	panel.add_child(label)
 
 	var guide_line := ColorRect.new()
 	if line_side == "left":
 		guide_line.position = Vector2(0, 8)
-		guide_line.size = Vector2(2.2, TARGET_SIZE.y - 16)
+		guide_line.size = Vector2(2.2, target_size.y - 16)
 	else:
-		guide_line.position = Vector2(10, TARGET_SIZE.y - 2.2)
-		guide_line.size = Vector2(TARGET_SIZE.x - 20, 2.2)
+		guide_line.position = Vector2(10, target_size.y - 2.2)
+		guide_line.size = Vector2(target_size.x - 20, 2.2)
 	guide_line.color = Color("31F6B7")
 	guide_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(guide_line)

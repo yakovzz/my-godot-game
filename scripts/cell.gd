@@ -24,7 +24,8 @@ func _ready() -> void:
 	if hit_button != null:
 		hit_button.mouse_filter = Control.MOUSE_FILTER_STOP
 	_update_visual()
-
+func _resized() -> void:
+	_update_visual()
 
 func setup(cell_value: int, cell_row: int, cell_col: int, is_selected: bool) -> void:
 	value = cell_value
@@ -48,11 +49,31 @@ func _on_hit_button_pressed() -> void:
 func _update_visual() -> void:
 	if value_label != null:
 		value_label.text = str(value)
-		value_label.add_theme_font_size_override("font_size", 36)
-		value_label.add_theme_color_override("font_color", Color("F4F7FA") if selected else Color("8792A5"))
+
+		var font_size := 36
+		var min_side: float = min(size.x, size.y)
+
+		if min_side <= 36:
+			font_size = 20
+		elif min_side <= 42:
+			font_size = 24
+		elif min_side <= 50:
+			font_size = 28
+		else:
+			font_size = 36
+
+		value_label.add_theme_font_size_override("font_size", font_size)
+
+		value_label.add_theme_color_override(
+			"font_color",
+			Color("F4F7FA") if selected else Color("8792A5")
+		)
 
 	if background != null:
-		background.add_theme_stylebox_override("panel", _build_stylebox(selected))
+		background.add_theme_stylebox_override(
+			"panel",
+			_build_stylebox(selected)
+		)
 
 	if hit_button != null:
 		hit_button.focus_mode = Control.FOCUS_NONE
@@ -67,8 +88,8 @@ func _build_stylebox(is_selected: bool) -> StyleBoxFlat:
 	style.border_width_top = 1
 	style.border_width_right = 1
 	style.border_width_bottom = 1
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_right = 12
-	style.corner_radius_bottom_left = 12
+	style.corner_radius_top_left = 6
+	style.corner_radius_top_right = 6
+	style.corner_radius_bottom_right = 6
+	style.corner_radius_bottom_left = 6
 	return style
